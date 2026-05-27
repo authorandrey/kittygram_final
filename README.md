@@ -1,26 +1,27 @@
-#  Как работать с репозиторием финального задания
+# Kittygram
 
-## Что нужно сделать
+Kittygram - социальная сеть для котиков. Можно добавлять фотографии котиков, оставлять описания, просматривать котиков других пользователей, редактировать и удалять записи.
 
-Настроить запуск проекта Kittygram в контейнерах и CI/CD с помощью GitHub Actions
+## Стек
+- Backend: Python, Django, DRF, PostgreSQL, Gunicorn
+- Frontend: React
+- Другое: Docker, Nginx, GitHub Actions, Docker Hub
 
-## Как проверить работу с помощью автотестов
-
-В корне репозитория создайте файл tests.yml со следующим содержимым:
-```yaml
-repo_owner: ваш_логин_на_гитхабе
-kittygram_domain: полная ссылка (https://доменное_имя) на ваш проект Kittygram
-taski_domain: полная ссылка (https://доменное_имя) на ваш проект Taski
-dockerhub_username: ваш_логин_на_докерхабе
-```
-
-Скопируйте содержимое файла `.github/workflows/main.yml` в файл `kittygram_workflow.yml` в корневой директории проекта.
-
-Для локального запуска тестов создайте виртуальное окружение, установите в него зависимости из backend/requirements.txt и запустите в корневой директории проекта `pytest`.
-
-## Чек-лист для проверки перед отправкой задания
-
-- Проект Taski доступен по доменному имени, указанному в `tests.yml`.
-- Проект Kittygram доступен по доменному имени, указанному в `tests.yml`.
-- Пуш в ветку main запускает тестирование и деплой Kittygram, а после успешного деплоя вам приходит сообщение в телеграм.
-- В корне проекта есть файл `kittygram_workflow.yml`.
+## Запуск локально
+1. Клонируйте репозиторий:
+   ```bash
+   git clone https://github.com/authorandrey/kittygram_final.git
+   cd kittygram_final
+   ```
+2. Создайте файл .env на основе .env.example (поставьте свой секретный ключ для Django)
+3. Запустите контейнеры:
+   ```bash
+   docker compose up --build
+   ```
+4. Выполните миграции и сбор статики:
+   ```bash
+   docker compose exec backend python manage.py migrate
+   docker compose exec backend python manage.py collectstatic --no-input
+   docker compose exec backend cp -r /app/collected_static/. /backend_static/static/
+   ```
+5. Откройте `http://localhost:9000`
